@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\API\AbsenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RolesController;
 use App\Http\Controllers\API\SettingRolesController;
 use App\Http\Controllers\API\ProfilePerusahaanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,5 +33,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('roles', RolesController::class);
     Route::resource('setting_roles', SettingRolesController::class);
     Route::resource('profile_perusahaan', ProfilePerusahaanController::class);
+    Route::resource('absen', AbsenController::class);
 });
 
