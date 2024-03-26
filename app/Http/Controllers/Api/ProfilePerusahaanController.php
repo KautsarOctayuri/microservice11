@@ -130,7 +130,7 @@ class ProfilePerusahaanController extends Controller
             }
 
             $data = profileperusahaan::find($id);
-            $data->users_id = $request->users_id;
+            //$data->users_id = $request->users_id;
             $data->nama_perusahaan = $request->nama_perusahaan;
             $data->    deskripsi = $request->deskripsi;
             $data->    lokasi = $request->lokasi;
