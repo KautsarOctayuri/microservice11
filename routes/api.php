@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RolesController;
 use App\Http\Controllers\API\SettingRolesController;
+use App\Http\Controllers\API\ProfilePerusahaanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,5 +30,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/search-user', [AuthController::class, 'search']);
     Route::resource('roles', RolesController::class);
     Route::resource('setting_roles', SettingRolesController::class);
+    Route::resource('profile_perusahaan', ProfilePerusahaanController::class);
 });
 
