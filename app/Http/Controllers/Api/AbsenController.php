@@ -118,9 +118,9 @@ class AbsenController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'users_id' => 'required',
-                'lokasi_user' => 'required',
-                'waktu_absen_masuk' => 'required',
+                //'users_id' => 'required',
+                //'lokasi_user' => 'required',
+                //'waktu_absen_masuk' => 'required',
                 'waktu_absen_pulang' => 'required',
                 'tanggal_hari_ini' => 'required',
             ]);
@@ -130,18 +130,36 @@ class AbsenController extends Controller
             }
 
             $data = Absen::find($id);
-            //$data->users_id = $request->users_id;
-            $data-> users_id = $request->users_id;
-            $data-> lokasi_user = $request->lokasi_user;
-            $data-> waktu_absen_masuk = $request->waktu_absen_masuk;
+
+            //Cek apakah data ada atau tidak  
+            if ($data == null){
+                $response = [
+                    'succes' =>  false,
+                    'message' => 'Data Tidak  Ditemukan',
+                ];
+                return response()->json($response, 500);
+            }
+            //Cek sudah absen pulang atau belum
+            if ($data -> waktu_absen_pulang != null || $data->tanggal_hari_ini != $request->tanggal_hari_ini){
+                $response = [
+                    'succes' =>  false,
+                    'message' => 'Anda sudah absen pulang atau tanggal hari ini tidak sesuai dengan tanggal absen',
+                ];
+                return response()->json($response, 500);
+            }
+
+
+            //$data-> users_id = $request->users_id;
+            //$data-> lokasi_user = $request->lokasi_user;
+            //$data-> waktu_absen_masuk = $request->waktu_absen_masuk;
             $data-> waktu_absen_pulang = $request->waktu_absen_pulang;
-            $data-> tanggal_hari_ini = $request->tanggal_hari_ini;
+            //$data-> tanggal_hari_ini = $request->tanggal_hari_ini;
             $data->save();
 
             $response = [
                 'success' => true,
                 'data' => $data,
-                'message' => 'Data berhasil di ubah',
+                'message' => 'Data Absen berhasil di ubah',
             ];
 
             return response()->json($response, 200);
