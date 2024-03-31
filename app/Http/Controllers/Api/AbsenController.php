@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Absen;
+use App\Models\profileperusahaan;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -45,9 +46,8 @@ class AbsenController extends Controller
                 'users_id' => 'required',
                 'lokasi_user' => 'required',
                 'waktu_absen_masuk' => 'required',
-                
                 'tanggal_hari_ini' => 'required',
-                
+                //'status' => 'required',
 
 
             ]);
@@ -56,15 +56,38 @@ class AbsenController extends Controller
             if ($validator->fails()) {
                 return response()->json($validator->errors());
             }
+
+            //Cek apakahsudah absen masuk atau belum
+            $data = Absen::where('tanggal_hari_ini',$request->tanggal_hari_ini)->where('users_id',$request->users_id->first());
+            if ($data!==null){
+                $response = [
+                    'succes' =>  false,
+                    'message' => 'Anda sudah absen masuk',
+                ];
+                return response()->json($response, 500);
+            }
+
+           //Kalau lebih dari jam masuk di profile perusahaan status jadi terlambat 
             
+            $profil = profileperusahaan::find(1);
+            $profile = strtotime($profil  -> jam_masuk);
+            $profilee = strtotime($request  -> waktu_absen_masuk);
+            $peraturan = date("H:i:s", $profile);
+            $pegawai_absen = date("H:i:s", $profilee);
+            if ($peraturan > $pegawai_absen){
+                $status = "Tepat Waktu";
+            } else {
+                $status = "Terlambat";
+            }
+
+
             //kalau ya maka akan membuat roles baru
             $data = Absen::create([
                 'users_id' => $request->users_id,
                 'lokasi_user' => $request->lokasi_user,
                 'waktu_absen_masuk' => $request->waktu_absen_masuk,
-                
                 'tanggal_hari_ini' => $request->tanggal_hari_ini,
-
+                'status' => $status,
 
             ]);
             
@@ -94,7 +117,8 @@ class AbsenController extends Controller
     public function show($id)
     {
         try {
-            $data = Absen::find($id);
+            //$data = Absen::find($id);
+            $data = Absen::where('id',$id)->first();
             $response = [
                 'success' => true,
                 'data' => $data,
@@ -130,7 +154,6 @@ class AbsenController extends Controller
             }
 
             $data = Absen::find($id);
-
             //Cek apakah data ada atau tidak  
             if ($data == null){
                 $response = [

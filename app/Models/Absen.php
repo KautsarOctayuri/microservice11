@@ -17,6 +17,7 @@ class Absen extends Model
          'waktu_absen_masuk',
          'waktu_absen_pulang',
          'tanggal_hari_ini',
+         'status',
 
 
     ];

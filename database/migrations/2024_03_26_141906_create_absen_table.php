@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('waktu_absen_masuk',length:10);
             $table->string('waktu_absen_pulang',length:10)->nullable();
             $table->string('tanggal_hari_ini',length:50);
+            $table->string('status',length:50);
+
             $table->timestamps();
         });
     }
