@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('profileperusahaan', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_perusahaan',length:150);
+            //tambahkan 6 table di bawah ini
+            $table->string('nama_perusahaan', length: 100);
             $table->text('deskripsi');
-            $table->text('lokasi');
-            $table->string('jam_masuk',length:10);
-            $table->string('jam_pulang',length:10);
-            $table->string('image')->nullable();
+            $table->text('latitude');
+            $table->text('longitude');
+            $table->string('jam_masuk', length: 100);
+            $table->string('jam_pulang', length: 100);
+            $table->text('image')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('profileperusahaan');
+        Schema::dropIfExists('profil_perusahaan');
     }
 };

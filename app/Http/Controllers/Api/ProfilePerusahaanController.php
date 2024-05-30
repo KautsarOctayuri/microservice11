@@ -36,55 +36,49 @@ class ProfilePerusahaanController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        
-        //isikan kode berikut
-        try {
-            //cek apakah request berisi nama_role atau tidak
-            $validator = Validator::make($request->all(), [
-                'nama_perusahaan' => 'required',
-                'deskripsi' => 'required',
-                'lokasi' => 'required',
-                'jam_masuk' => 'required',
-                'jam_pulang' => 'required',
-                
+    { try {
+        $validator = Validator::make($request->all(), [
+            'nama_perusahaan' => 'required',
+            'deskripsi' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            'jam_masuk' => 'required',
+            'jam_pulang' => 'required',
+        ]);
 
-
-            ]);
-            
-            //kalau tidak akan mengembalikan error
-            if ($validator->fails()) {
-                return response()->json($validator->errors());
-            }
-            
-            //kalau ya maka akan membuat roles baru
-            $data = profileperusahaan::create([
-                'nama_perusahaan' => $request->nama_perusahaan,
-                'deskripsi' => $request->deskripsi,
-                'lokasi' => $request->lokasi,
-                'jam_masuk' => $request->jam_masuk,
-                'jam_pulang' => $request->jam_pulang,
-
-
-            ]);
-            
-            //data akan di kirimkan dalam bentuk response list
-            $response = [
-                'success' => true,
-                'data' => $data,
-                'message' => 'Data berhasil di simpan',
-            ];
-            
-            //jika berhasil maka akan mengirimkan status code 200
-            return response()->json($response, 200);
-        } catch (Exception $th) {
-            $response = [
-                'success' => false,
-                'message' => $th,
-            ];
-            //jika error maka akan mengirimkan status code 500
-            return response()->json($response, 500);
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
         }
+
+      
+
+        $data = profileperusahaan::create([
+            'nama_perusahaan' => $request->nama_perusahaan,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'deskripsi' => $request->deskripsi,
+            'jam_masuk' => $request->jam_masuk,
+            'jam_pulang' => $request->jam_pulang,
+            'image' => $request->image,
+
+        ]);
+
+
+        $response = [
+            'success' => true,
+            'data' => $data,
+            'message' => 'Profile Perusahaan berhasil disimpan',
+        ];
+
+        return response()->json($response, 200);
+
+    } catch (Exception $th) {
+        $response = [
+            'success' => false,
+            'message' => 'Gagal menyimpan data',
+        ];
+        return response()->json($response, 500);
+    }
     
     }
 
@@ -120,7 +114,8 @@ class ProfilePerusahaanController extends Controller
             $validator = Validator::make($request->all(), [
                 'nama_perusahaan' => 'required',
                 'deskripsi' => 'required',
-                'lokasi' => 'required',
+                'latitude' => 'required',
+                'longitude' => 'required',
                 'jam_masuk' => 'required',
                 'jam_pulang' => 'required',
             ]);
@@ -130,25 +125,27 @@ class ProfilePerusahaanController extends Controller
             }
 
             $data = profileperusahaan::find($id);
-            //$data->users_id = $request->users_id;
             $data->nama_perusahaan = $request->nama_perusahaan;
-            $data->    deskripsi = $request->deskripsi;
-            $data->    lokasi = $request->lokasi;
-            $data->   jam_masuk = $request->jam_masuk;
-            $data->   jam_pulang = $request->jam_pulang;
+            $data->latitude = $request->latitude;
+            $data->longitude = $request->longitude;
+            $data->deskripsi = $request->deskripsi;
+            $data->jam_masuk = $request->jam_masuk;
+            $data->jam_pulang = $request->jam_pulang;
             $data->save();
+
 
             $response = [
                 'success' => true,
                 'data' => $data,
-                'message' => 'Data berhasil di ubah',
+                'message' => 'Data Perusahaan berhasil disimpan',
             ];
 
             return response()->json($response, 200);
+
         } catch (Exception $th) {
             $response = [
                 'success' => false,
-                'message' => $th,
+                'message' => 'Data Perusahaan tidak ditemukan',
             ];
             return response()->json($response, 500);
         }
