@@ -37,5 +37,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('setting_roles', SettingRolesController::class);
     Route::resource('profile_perusahaan', ProfilePerusahaanController::class);
     Route::resource('absen', AbsenController::class);
+    //absen
+    Route::get('/cek_absen_hari_ini/{users_id}/{tanggal_hari_ini}', [AbsenController::class, 'cek_absen_hari_ini']);
+    Route::get('/absen_history/{users_id}', [AbsenController::class, 'absen_history']);
 });
 

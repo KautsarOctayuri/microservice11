@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Absen;
 use App\Models\profileperusahaan;
+use Exception;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -215,6 +216,58 @@ class AbsenController extends Controller
             $response = [
                 'success' => false,
                 'message' => $th,
+            ];
+            return response()->json($response, 500);
+        }
+    }
+
+    public function cek_absen_hari_ini($users_id, $tanggal_hari_ini)
+    {
+        try {
+            $data = Absen::where(['users_id' => $users_id, 'tanggal_hari_ini' => $tanggal_hari_ini])->first();
+            if ($data == null) {
+                $response = [
+                    'success' => false,
+                    'message' => 'Data Absen Tidak Di temukan',
+                ];
+                return response()->json($response, 500);
+            }
+            $response = [
+                'success' => true,
+                'data' => $data,
+                'message' => 'Data Tersedia',
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $th) {
+            $response = [
+                'success' => false,
+                'message' => 'Data Absen Tidak Di temukan',
+            ];
+            return response()->json($response, 500);
+        }
+    }
+
+    public function absen_history($users_id)
+    {
+        try {
+            $data = Absen::where(['users_id' => $users_id])->limit(30)->get();
+            if ($data == null) {
+                $response = [
+                    'success' => false,
+                    'message' => 'Data Absen Tidak Di temukan',
+                ];
+                return response()->json($response, 500);
+            }
+            $response = [
+                'success' => true,
+                'data' => $data,
+                'message' => 'Data Tersedia',
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $th) {
+            $response = [
+                'success' => false,
+                'message' => 'Data Absen Tidak Di temukan',
             ];
             return response()->json($response, 500);
         }
