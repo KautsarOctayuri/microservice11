@@ -59,7 +59,7 @@ class AbsenController extends Controller
             }
 
             //Cek apakahsudah absen masuk atau belum
-            $data = Absen::where('tanggal_hari_ini',$request->tanggal_hari_ini)->where('users_id',$request->users_id->first());
+            $data = Absen::where('tanggal_hari_ini',$request->tanggal_hari_ini)->where('users_id',$request->users_id)->first();
             if ($data!==null){
                 $response = [
                     'succes' =>  false,
